@@ -34,18 +34,12 @@
             </router-link>
           </div>
           <div :key="web3.account">
-            <template v-if="$auth.isAuthenticated.value">
+            <template v-if="web3.account">
               <UiButton
                 @click="modalOpen = true"
                 class="button-outline"
                 :loading="app.authLoading"
               >
-                <Avatar
-                  :profile="web3.profile"
-                  :address="web3.account"
-                  size="16"
-                  class="mr-n1 mr-sm-2 mr-md-2 mr-lg-2 mr-xl-2 ml-n1"
-                />
                 <span
                   v-if="web3.profile?.name || web3.profile?.ens"
                   v-text="web3.profile.name || web3.profile.ens"
@@ -55,7 +49,7 @@
               </UiButton>
             </template>
             <UiButton
-              v-if="!$auth.isAuthenticated.value"
+              v-if="!web3.account"
               @click="modalOpen = true"
               :loading="loading || app.authLoading"
             >
@@ -97,6 +91,7 @@ export default {
   },
   computed: {
     space() {
+      // console.log($auth.isAuthenticated.value)
       const key = this.domain || this.$route.params.key;
       return this.app.spaces[key] ? this.app.spaces[key] : false;
     }

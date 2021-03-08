@@ -2,6 +2,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import store from '@/store';
+import { importIotexAccount } from '@/auth';
 import { formatUnits } from '@ethersproject/units';
 import { getProfiles } from '@/helpers/profile';
 
@@ -44,6 +45,20 @@ const mutations = {
 };
 
 const actions = {
+  loginWithIotex: async ({ commit }, address: string) => {
+
+    auth = getInstance();
+    commit('SET', { authLoading: true });
+    const account = await importIotexAccount(address);
+    auth.web3 = {
+      isAuthenticated: {
+        value: true
+      }
+    }
+    commit('WEB3_SET', { account: account.address, profile: null });
+    commit('SET', { authLoading: false });
+  },
+
   login: async ({ dispatch, commit }, connector = 'injected') => {
     auth = getInstance();
     commit('SET', { authLoading: true });
