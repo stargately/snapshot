@@ -2,7 +2,19 @@
   <UiModal :open="open" @close="$emit('close')">
     <template v-slot:header>
       <h3 v-if="!web3.account || step === 'connect'">Connect wallet</h3>
-      <h3 v-else>Account</h3>
+      <div v-else>
+        <h3>Account</h3>
+        <p>{{ web3.account }}</p>
+        <a
+          :href="`https://testnet.iotexscan.io/address/${web3.account}`"
+          target="_blank"
+          class="mb-2 d-block"
+        >
+          <UiButton class="button-outline width-full v-align-middle">
+            view on iotex
+          </UiButton>
+        </a>
+      </div>
     </template>
     <div v-if="!web3.account && step !== 'import'">
       <a
@@ -26,7 +38,12 @@
     </div>
     <div v-if="step === 'import'">
       <form>
-        <input v-model="privateKey" />
+        <input
+          v-model="privateKey"
+          class="form-control input-block"
+          type="text"
+          placeholder="address"
+        />
         <UiButton
           class="button-outline width-full v-align-middle"
           @click="importAccount"
