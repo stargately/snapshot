@@ -62,6 +62,7 @@
     "vue3-jazzicon": "^0.1.1",
     "vuedraggable": "^4.0.1",
     "vuex": "^4.0.0-alpha.1",
+    "vuex-persistedstate": "^4.0.0-beta.3",
     "walletlink": "^2.0.2"
   },
   "devDependencies": {

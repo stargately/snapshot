@@ -20,7 +20,7 @@ if (wsProvider) {
 const state = {
   account: null,
   name: null,
-  network: networks[defaultNetwork]
+  network: 'testnet.iotex'
 };
 
 const mutations = {
