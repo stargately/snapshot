@@ -141,17 +141,6 @@
               class="float-right text-white tooltipped tooltipped-n"
             />
           </div>
-          <div class="mb-1">
-            <b>Snapshot</b>
-            <a
-              :href="_explorer(space.network, payload.snapshot, 'block')"
-              target="_blank"
-              class="float-right"
-            >
-              {{ _n(payload.snapshot, '0,0') }}
-              <Icon name="external-link" class="ml-1" />
-            </a>
-          </div>
         </div>
       </Block>
       <BlockResults

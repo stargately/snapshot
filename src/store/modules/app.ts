@@ -1,10 +1,11 @@
 import { getProfiles } from '@/helpers/profile';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import { ipfsGet, getScores } from '@snapshot-labs/snapshot.js/src/utils';
-import {
-  getBlockNumber,
-  signMessage
-} from '@snapshot-labs/snapshot.js/src/utils/web3';
+import { ipfsGet } from '@snapshot-labs/snapshot.js/src/utils';
+import { getScores } from '@/helpers/mock';
+// import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
+import { getBlockNumber } from '@/helpers/mock';
+import { signMessage } from '@/helpers/mock';
+
 import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
 import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
 import client from '@/helpers/client';
@@ -73,6 +74,7 @@ const actions = {
     auth.getConnector().then(connector => {
       if (connector) dispatch('login', connector);
     });
+    dispatch('checkAuth');
     commit('SET', { loading: false, init: true });
   },
   loading: ({ commit }, payload) => {
@@ -128,7 +130,7 @@ const actions = {
     commit('GET_PROPOSALS_REQUEST');
     try {
       let proposals: any = await client.request(`${space.key}/proposals`);
-      if (proposals && !space.filters?.onlyMembers) {
+      if (Object.keys(proposals).length > 0 && !space.filters?.onlyMembers) {
         const scores: any = await getScores(
           space.key,
           space.strategies,

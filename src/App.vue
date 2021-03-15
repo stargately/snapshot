@@ -20,6 +20,9 @@ export default {
     'app.modalOpen': function(val) {
       const el = document.body;
       el.classList[val ? 'add' : 'remove']('overflow-hidden');
+    },
+    'web3.account': async function() {
+      this.checkAuth();
     }
   },
   computed: {
@@ -36,7 +39,7 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions(['init'])
+    ...mapActions(['init', 'checkAuth'])
   }
 };
 </script>

@@ -25,7 +25,6 @@ export default Object.fromEntries(
       } catch (error) {
         strategy.about = '';
       }
-      console.log('test', key, strategy);
       return [key, strategy];
     })
 );

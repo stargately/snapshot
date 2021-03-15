@@ -31,6 +31,12 @@
       </a>
       <UiButton
         class="button-outline width-full v-align-middle"
+        @click="loginWithIopay"
+      >
+        login with IoPay
+      </UiButton>
+      <UiButton
+        class="button-outline width-full v-align-middle"
         @click="toImportForm"
       >
         import iotex
@@ -83,7 +89,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout', 'loginWithIotex']),
+    ...mapActions(['logout', 'loginWithIotex', 'loginWithIopay']),
     async handleLogout() {
       await this.logout();
       this.$emit('close');

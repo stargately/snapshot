@@ -5,6 +5,9 @@ import store from '@/store';
 import { importIotexAccount } from '@/auth';
 import { formatUnits } from '@ethersproject/units';
 import { getProfiles } from '@/helpers/profile';
+import sleepPromise from 'sleep-promise';
+import Antenna from 'iotex-antenna';
+import { WsSignerPlugin } from 'iotex-antenna/lib/plugin/ws';
 
 let wsProvider;
 let auth;
@@ -45,8 +48,17 @@ const mutations = {
 };
 
 const actions = {
-  loginWithIotex: async ({ commit }, address: string) => {
+  checkAuth: async ({ state }) => {
+    console.log('check auth', state);
+    if (state.account) {
+      auth = getInstance();
+      auth.isAuthenticated = {
+        value: true
+      };
+    }
+  },
 
+  loginWithIotex: async ({ commit }, address: string) => {
     auth = getInstance();
     commit('SET', { authLoading: true });
     const account = await importIotexAccount(address);
@@ -54,8 +66,24 @@ const actions = {
       isAuthenticated: {
         value: true
       }
-    }
+    };
     commit('WEB3_SET', { account: account.address, profile: null });
+    commit('SET', { authLoading: false });
+  },
+
+  loginWithIopay: async ({ commit }) => {
+    commit('SET', { authLoading: true });
+
+    const antenna = new Antenna('http://api.iotex.one:80', {
+      signer: new WsSignerPlugin()
+    });
+
+    await sleepPromise(3000);
+
+    commit('WEB3_SET', {
+      account: antenna.iotx.accounts[0].address,
+      profile: null
+    });
     commit('SET', { authLoading: false });
   },
 
@@ -103,8 +131,6 @@ const actions = {
       } catch (e) {
         console.log(e);
       }
-      console.log('Network', network);
-      console.log('Accounts', accounts);
       commit('HANDLE_CHAIN_CHANGED', network.chainId);
       const account = accounts.length > 0 ? accounts[0] : null;
       const profiles = await getProfiles([account]);

@@ -12,36 +12,6 @@
         <PageLoading v-else />
       </div>
       <template v-if="loaded">
-        <Block title="ENS">
-          <UiButton class="d-flex width-full mb-2">
-            <input
-              readonly
-              v-model="contenthash"
-              class="input width-full"
-              placeholder="Content hash"
-            />
-            <Icon
-              v-clipboard:copy="contenthash"
-              v-clipboard:success="handleCopy"
-              name="copy"
-              size="24"
-              class="text-gray p-2 mr-n3"
-            />
-          </UiButton>
-          <a
-            :href="`https://app.ens.domains/name/${key}`"
-            target="_blank"
-            class="mb-2 d-block"
-          >
-            <UiButton
-              :class="!isReady && 'button--submit'"
-              class="button-outline width-full"
-            >
-              {{ isReady ? 'See on ENS' : 'Set record on ENS' }}
-              <Icon name="external-link" class="ml-1" />
-            </UiButton>
-          </a>
-        </Block>
         <div v-if="isReady">
           <Block title="Profile">
             <div class="mb-2">
@@ -209,13 +179,10 @@
 
 <script>
 import { mapActions } from 'vuex';
-// import { getAddress } from '@ethersproject/address';
 import { validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import schemas from '@snapshot-labs/snapshot.js/src/schemas';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
-// import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
 import { clone } from '@/helpers/utils';
-// import { uriGet } from '@/helpers/ens';
 
 // const gateway = process.env.VUE_APP_IPFS_GATEWAY || gateways[0];
 
