@@ -227,8 +227,6 @@ export default {
   },
   async created() {
     try {
-      console.log(this.key);
-      // const uri = await getSpaceUri(this.key);
       const uri = `https://${this.web3.account}`;
       this.currentContenthash = uri;
       let space = clone(this.app.spaces?.[this.key]);

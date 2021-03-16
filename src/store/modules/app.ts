@@ -6,7 +6,7 @@ import { getScores } from '@/helpers/mock';
 import { getBlockNumber } from '@/helpers/mock';
 import { signMessage } from '@/helpers/mock';
 
-import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
+import { getProvider } from '@/helpers/mock';
 import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
 import client from '@/helpers/client';
 import { formatProposal, formatProposals, formatSpace } from '@/helpers/utils';

@@ -91,7 +91,6 @@ export default {
   },
   computed: {
     space() {
-      // console.log($auth.isAuthenticated.value)
       const key = this.domain || this.$route.params.key;
       return this.app.spaces[key] ? this.app.spaces[key] : false;
     }

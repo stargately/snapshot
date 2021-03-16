@@ -14,4 +14,8 @@ export const signMessage = async (
 
 export const getBlockNumber = (provider: string) => {
     return 10;
-}
+};
+
+export const getProvider = (network: string) => {
+    return 'test.iotex';
+};
