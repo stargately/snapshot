@@ -12,48 +12,9 @@
         <PageLoading v-else />
       </div>
       <template v-if="loaded">
-        <Block title="ENS">
-          <UiButton class="d-flex width-full mb-2">
-            <input
-              readonly
-              v-model="contenthash"
-              class="input width-full"
-              placeholder="Content hash"
-            />
-            <Icon
-              v-clipboard:copy="contenthash"
-              v-clipboard:success="handleCopy"
-              name="copy"
-              size="24"
-              class="text-gray p-2 mr-n3"
-            />
-          </UiButton>
-          <a
-            :href="`https://app.ens.domains/name/${key}`"
-            target="_blank"
-            class="mb-2 d-block"
-          >
-            <UiButton
-              :class="!isReady && 'button--submit'"
-              class="button-outline width-full"
-            >
-              {{ isReady ? 'See on ENS' : 'Set record on ENS' }}
-              <Icon name="external-link" class="ml-1" />
-            </UiButton>
-          </a>
-        </Block>
         <div v-if="isReady">
           <Block title="Profile">
             <div class="mb-2">
-              <a
-                href="https://docs.snapshot.page/spaces/add-avatar"
-                target="_blank"
-              >
-                <UiButton class="width-full mb-2">
-                  Change avatar
-                  <Icon name="external-link" class="ml-1" />
-                </UiButton>
-              </a>
               <UiButton class="text-left width-full mb-2 d-flex px-3">
                 <div class="text-gray mr-2">Name</div>
                 <input v-model="form.name" class="input flex-auto" required />
@@ -64,11 +25,7 @@
               >
                 <div class="text-gray mr-2">Network</div>
                 <div class="flex-auto">
-                  {{
-                    form.network
-                      ? networks[form.network].name
-                      : 'Select network'
-                  }}
+                  {{ form.network }}
                 </div>
               </UiButton>
               <UiButton class="text-left width-full mb-2 d-flex px-3">
@@ -222,15 +179,12 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { getAddress } from '@ethersproject/address';
 import { validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import schemas from '@snapshot-labs/snapshot.js/src/schemas';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
-import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
 import { clone } from '@/helpers/utils';
-import { getSpaceUri, uriGet } from '@/helpers/ens';
 
-const gateway = process.env.VUE_APP_IPFS_GATEWAY || gateways[0];
+// const gateway = process.env.VUE_APP_IPFS_GATEWAY || gateways[0];
 
 export default {
   data() {
@@ -248,7 +202,8 @@ export default {
       loading: false,
       form: {
         strategies: [],
-        filters: {}
+        filters: {},
+        network: 'testnet.iotex'
       },
       networks
     };
@@ -262,22 +217,20 @@ export default {
       return !this.loading && this.web3.account && this.validate === true;
     },
     contenthash() {
-      const address = this.web3.account
-        ? getAddress(this.web3.account)
-        : '<your-address>';
+      const address = this.web3.account;
       return `ipns://storage.snapshot.page/registry/${address}/${this.key}`;
     },
     isReady() {
-      return this.currentContenthash === this.contenthash;
+      // return this.currentContenthash === this.contenthash;
+      return true;
     }
   },
   async created() {
     try {
-      const uri = await getSpaceUri(this.key);
+      const uri = `https://${this.web3.account}`;
       this.currentContenthash = uri;
-      const [protocolType, decoded] = uri.split('://');
       let space = clone(this.app.spaces?.[this.key]);
-      if (!space) space = await uriGet(gateway, decoded, protocolType);
+      if (!space) space = {};
       delete space.key;
       delete space._activeProposals;
       space.filters = space.filters || {};
@@ -296,7 +249,7 @@ export default {
     this.loaded = true;
   },
   methods: {
-    ...mapActions(['notify', 'send', 'getSpaces']),
+    ...mapActions(['notify', 'send', 'getSpaces', 'login']),
     async handleSubmit() {
       this.loading = true;
       try {

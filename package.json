@@ -4,7 +4,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "vue-cli-service serve"
   },
   "dependencies": {
     "@ensdomains/content-hash": "^2.5.3",
@@ -39,6 +40,7 @@
     "eslint": "^6.7.2",
     "ethereumjs-util": "^7.0.7",
     "fortmatic": "^2.0.6",
+    "iotex-antenna": "^0.30.4",
     "jsonexport": "^3.0.1",
     "lodash": "^4.17.15",
     "numeral": "^2.0.4",
@@ -48,6 +50,7 @@
     "remarkable": "^2.0.1",
     "sanitize-html": "^1.27.1",
     "serve-static": "^1.14.1",
+    "sleep-promise": "^9.1.0",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
     "typescript": "~3.9.3",
@@ -61,6 +64,7 @@
     "vue3-jazzicon": "^0.1.1",
     "vuedraggable": "^4.0.1",
     "vuex": "^4.0.0-alpha.1",
+    "vuex-persistedstate": "^4.0.0-beta.3",
     "walletlink": "^2.0.2"
   },
   "devDependencies": {

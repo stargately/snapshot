@@ -132,10 +132,8 @@
 import { mapActions } from 'vuex';
 import draggable from 'vuedraggable';
 import { ipfsGet } from '@snapshot-labs/snapshot.js/src/utils';
-import getProvider from '@snapshot-labs/snapshot.js/src/utils/provider';
-import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
+import { getBlockNumber } from "@/helpers/mock";
 import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
-
 const gateway = process.env.VUE_APP_IPFS_GATEWAY || gateways[0];
 
 export default {
@@ -181,8 +179,8 @@ export default {
         // this.form.start >= ts &&
         this.form.end &&
         this.form.end > this.form.start &&
-        this.form.snapshot &&
-        this.form.snapshot > this.blockNumber / 2 &&
+        // this.form.snapshot &&
+        // this.form.snapshot > this.blockNumber / 2 &&
         this.choices.length >= 2 &&
         !this.choices.some(a => a.text === '')
       );
@@ -191,14 +189,12 @@ export default {
   async mounted() {
     this.$refs.nameForm.focus();
     this.addChoice(2);
-    this.blockNumber = await getBlockNumber(getProvider(this.space.network));
-    this.form.snapshot = this.blockNumber;
+    this.blockNumber = await getBlockNumber(this.space.network);
     if (this.from) {
       try {
         const proposal = await ipfsGet(gateway, this.from);
         const msg = JSON.parse(proposal.msg);
         this.form = msg.payload;
-        this.choices = msg.payload.choices.map((text, key) => ({ key, text }));
       } catch (e) {
         console.log(e);
       }
