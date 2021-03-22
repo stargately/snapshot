@@ -11,35 +11,23 @@
           class="mb-2 d-block"
         >
           <UiButton class="button-outline width-full v-align-middle">
-            view on iotex
+            View on IoTex
           </UiButton>
         </a>
+        <UiButton
+          @click="handleLogout"
+          class="button-outline width-full v-align-middle"
+        >
+          Logout
+        </UiButton>
       </div>
     </template>
     <div v-if="!web3.account && step !== 'import'">
-      <a
-        href="https://beancount.io/wallet"
-        target="_blank"
-        class="mb-2 d-block"
-      >
-        <UiButton
-          class="button-outline width-full v-align-middle"
-          @click="createAccount"
-        >
-          create iotex account
-        </UiButton>
-      </a>
       <UiButton
         class="button-outline width-full v-align-middle"
         @click="loginWithIopay"
       >
         login with IoPay
-      </UiButton>
-      <UiButton
-        class="button-outline width-full v-align-middle"
-        @click="toImportForm"
-      >
-        import iotex
       </UiButton>
     </div>
     <div v-if="step === 'import'">
@@ -89,13 +77,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout', 'loginWithIotex', 'loginWithIopay']),
+    ...mapActions(['logout', 'loginWithIopay']),
     async handleLogout() {
       await this.logout();
       this.$emit('close');
-    },
-    toImportForm() {
-      this.step = 'import';
     },
     async importAccount() {
       if (this.privateKey) {

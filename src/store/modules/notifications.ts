@@ -13,6 +13,10 @@ const actions = {
     Array.isArray(payload)
       ? commit('notify', { message: payload[1], type: payload[0] })
       : commit('notify', { message: payload, type: 'green' });
+  },
+
+  notifyOpenIoPay({ commit }) {
+    commit('Notify', { message: "", type: "red" });
   }
 };
 

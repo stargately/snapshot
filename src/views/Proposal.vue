@@ -204,7 +204,7 @@ export default {
       modalOpen: false,
       modalStrategiesOpen: false,
       selectedChoice: 0,
-      totalScore: 0,
+      totalScore: 100,
       scores: []
     };
   },

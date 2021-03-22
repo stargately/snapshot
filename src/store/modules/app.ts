@@ -3,10 +3,7 @@ import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { ipfsGet } from '@snapshot-labs/snapshot.js/src/utils';
 import { getScores } from '@/helpers/mock';
 // import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
-import { getBlockNumber } from '@/helpers/mock';
-import { signMessage } from '@/helpers/mock';
-
-import { getProvider } from '@/helpers/mock';
+import { getBlockNumber, getProvider, signMessage } from '@/helpers/mock';
 import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
 import client from '@/helpers/client';
 import { formatProposal, formatProposals, formatSpace } from '@/helpers/utils';
@@ -95,7 +92,6 @@ const actions = {
     return spaces;
   },
   send: async ({ commit, dispatch, rootState }, { space, type, payload }) => {
-    const auth = getInstance();
     commit('SEND_REQUEST');
     try {
       const msg: any = {
@@ -108,7 +104,7 @@ const actions = {
           payload
         })
       };
-      msg.sig = await signMessage(auth.web3, msg.msg, rootState.web3.account);
+      msg.sig = await signMessage(msg.msg, rootState.web3.account);
       const result = await client.request('message', msg);
       commit('SEND_SUCCESS');
       dispatch('notify', [
@@ -189,7 +185,6 @@ const actions = {
         getProfiles([proposal.address, ...voters])
       ]);
       console.timeEnd('getProposal.scores');
-      console.log('Scores', scores);
 
       const authorProfile = profiles[proposal.address];
       voters.forEach(address => {
@@ -197,11 +192,12 @@ const actions = {
       });
       proposal.profile = authorProfile;
 
+      // TODO: fix score
       votes = Object.fromEntries(
         Object.entries(votes)
           .map((vote: any) => {
             vote[1].scores = space.strategies.map(
-              (strategy, i) => scores[i][vote[1].address] || 0
+              (strategy, i) => 1 // scores[i][vote[1].address] || 0
             );
             vote[1].balance = vote[1].scores.reduce((a, b: any) => a + b, 0);
             return vote;
