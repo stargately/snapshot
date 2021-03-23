@@ -19,10 +19,7 @@
                 <div class="text-gray mr-2">Name</div>
                 <input v-model="form.name" class="input flex-auto" required />
               </UiButton>
-              <UiButton
-                @click="modalNetworksOpen = true"
-                class="text-left width-full mb-2 d-flex px-3"
-              >
+              <UiButton class="text-left width-full mb-2 d-flex px-3">
                 <div class="text-gray mr-2">Network</div>
                 <div class="flex-auto">
                   {{ form.network }}
@@ -52,10 +49,6 @@
                   <Icon name="info" size="24" class="text-gray p-1" />
                 </a>
               </UiButton>
-              <div class="d-flex flex-items-center px-2">
-                <Checkbox v-model="form.private" class="mr-2 mt-1" />
-                Hide space from homepage
-              </div>
             </div>
           </Block>
           <Block title="Strategies">
@@ -183,7 +176,6 @@ import { validateSchema } from '@snapshot-labs/snapshot.js/src/utils';
 import schemas from '@snapshot-labs/snapshot.js/src/schemas';
 import networks from '@snapshot-labs/snapshot.js/src/networks.json';
 import { clone } from '@/helpers/utils';
-
 // const gateway = process.env.VUE_APP_IPFS_GATEWAY || gateways[0];
 
 export default {

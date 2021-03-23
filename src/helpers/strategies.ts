@@ -1,14 +1,6 @@
-const requireFile = require.context(
-  '@snapshot-labs/snapshot.js/src/strategies',
-  true,
-  /index\.ts$/
-);
+const requireFile = require.context('./strategies', true, /index\.ts$/);
 
-const requireReadmeFile = require.context(
-  '@snapshot-labs/snapshot.js/src/strategies',
-  true,
-  /README\.md$/
-);
+const requireReadmeFile = require.context('./strategies', true, /README\.md$/);
 
 export default Object.fromEntries(
   requireFile

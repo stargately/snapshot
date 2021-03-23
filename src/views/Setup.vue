@@ -12,24 +12,17 @@
       </div>
       <Block>
         <div class="mb-3">
-          Use an existing ENS name to create your space on.
+          Choose a space name
         </div>
         <UiButton class="text-left width-full mb-3 d-flex px-3">
           <input
             v-model="id"
             class="input flex-auto"
-            placeholder="e.g. yam.eth"
+            placeholder="e.g. a.iotex"
           />
-          <a
-            class="d-block py-1 mr-n2"
-            target="_blank"
-            href="https://docs.snapshot.page/spaces/create"
-          >
-            <Icon name="info" size="24" class="text-gray p-1" />
-          </a>
         </UiButton>
         <UiButton
-          :disabled="!id.includes('.eth') && !id.includes('.xyz')"
+          :disabled="id.length === 0"
           @click="handleSubmit"
           class="button--submit width-full"
         >

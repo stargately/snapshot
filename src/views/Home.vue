@@ -10,7 +10,7 @@
         <div class="ml-3 text-right hide-sm">
           {{ _n(spaces.length) }} space(s)
           <router-link :to="{ name: 'setup' }" class="hide-md ml-3">
-            <UiButton>Create space</UiButton>
+            <UiButton :disabled="!this.web3.account">Create space</UiButton>
           </router-link>
         </div>
       </Container>

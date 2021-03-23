@@ -15,7 +15,7 @@
           </div>
         </div>
         <router-link
-          v-if="$auth.isAuthenticated.value"
+          v-if="this.web3.account"
           :to="{ name: 'create', params: { key } }"
         >
           <UiButton>New proposal</UiButton>

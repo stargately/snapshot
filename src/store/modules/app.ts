@@ -1,7 +1,7 @@
 import { getProfiles } from '@/helpers/profile';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
-import { ipfsGet } from '@snapshot-labs/snapshot.js/src/utils';
-import { getScores } from '@/helpers/mock';
+import { ipfsGet, getScores } from '@snapshot-labs/snapshot.js/src/utils';
+// import { getScores } from '@/helpers/mock';
 // import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
 import { getBlockNumber, getProvider, signMessage } from '@/helpers/mock';
 import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
@@ -197,7 +197,7 @@ const actions = {
         Object.entries(votes)
           .map((vote: any) => {
             vote[1].scores = space.strategies.map(
-              (strategy, i) => 1 // scores[i][vote[1].address] || 0
+              (strategy, i) => scores[i][vote[1].address] || 0
             );
             vote[1].balance = vote[1].scores.reduce((a, b: any) => a + b, 0);
             return vote;
