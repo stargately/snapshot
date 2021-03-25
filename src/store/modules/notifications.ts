@@ -16,7 +16,11 @@ const actions = {
   },
 
   notifyOpenIoPay({ commit }) {
-    commit('Notify', { message: "", type: "red" });
+    commit('notify', { message: 'Please open IoPay to sign', type: 'red' });
+  },
+
+  notifySignSuccessfully({ commit }) {
+    commit('notify', { message: 'Sign Message Successfully' });
   }
 };
 

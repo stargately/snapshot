@@ -1,7 +1,6 @@
 import { createStore } from 'vuex';
 import modules from '@/store/modules';
-import createPersistedState from 'vuex-persistedstate'
-
+import createPersistedState from 'vuex-persistedstate';
 
 const web3State = createPersistedState({
   paths: ['web3']

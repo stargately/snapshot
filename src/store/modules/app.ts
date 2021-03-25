@@ -1,9 +1,8 @@
 import { getProfiles } from '@/helpers/profile';
 import { getInstance } from '@snapshot-labs/lock/plugins/vue3';
 import { ipfsGet, getScores } from '@snapshot-labs/snapshot.js/src/utils';
-// import { getScores } from '@/helpers/mock';
-// import { getBlockNumber } from '@snapshot-labs/snapshot.js/src/utils/web3';
-import { getBlockNumber, getProvider, signMessage } from '@/helpers/mock';
+import { getBlockNumber, getProvider } from '@/helpers/mock';
+import { signMessage } from '@/auth';
 import gateways from '@snapshot-labs/snapshot.js/src/gateways.json';
 import client from '@/helpers/client';
 import { formatProposal, formatProposals, formatSpace } from '@/helpers/utils';
@@ -104,7 +103,12 @@ const actions = {
           payload
         })
       };
-      msg.sig = await signMessage(msg.msg, rootState.web3.account);
+      msg.sig = await signMessage(msg.msg);
+      if (!msg.sig) {
+        dispatch('notifyOpenIoPay');
+        return;
+      }
+
       const result = await client.request('message', msg);
       commit('SEND_SUCCESS');
       dispatch('notify', [
@@ -114,6 +118,7 @@ const actions = {
       return result;
     } catch (e) {
       commit('SEND_FAILURE', e);
+      console.error(e);
       const errorMessage =
         e && e.error_description
           ? `Oops, ${e.error_description}`
@@ -162,26 +167,14 @@ const actions = {
         getBlockNumber(provider)
       ]);
       console.timeEnd('getProposal.data');
-      const [, , blockNumber] = response;
       let [proposal, votes]: any = response;
       proposal = formatProposal(proposal);
       proposal.ipfsHash = id;
       const voters = Object.keys(votes);
-      const { snapshot } = proposal.msg.payload;
-      const blockTag = snapshot > blockNumber ? 'latest' : parseInt(snapshot);
-
       /* Get scores */
       console.time('getProposal.scores');
       const [scores, profiles]: any = await Promise.all([
-        getScores(
-          space.key,
-          space.strategies,
-          space.network,
-          provider,
-          voters,
-          // @ts-ignore
-          blockTag
-        ),
+        getScores(space.key, space.strategies, space.network, provider, voters),
         getProfiles([proposal.address, ...voters])
       ]);
       console.timeEnd('getProposal.scores');
@@ -238,19 +231,15 @@ const actions = {
       commit('GET_PROPOSAL_FAILURE', e);
     }
   },
-  getPower: async ({ commit }, { space, address, snapshot }) => {
+  getPower: async ({ commit }, { space, address }) => {
     commit('GET_POWER_REQUEST');
     try {
-      const blockNumber = await getBlockNumber(getProvider(space.network));
-      const blockTag = snapshot > blockNumber ? 'latest' : parseInt(snapshot);
       let scores: any = await getScores(
         space.key,
         space.strategies,
         space.network,
         getProvider(space.network),
-        [address],
-        // @ts-ignore
-        blockTag
+        [address]
       );
       scores = scores.map((score: any) =>
         Object.values(score).reduce((a, b: any) => a + b, 0)

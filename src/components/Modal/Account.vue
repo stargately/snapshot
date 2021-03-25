@@ -4,7 +4,6 @@
       <h3 v-if="!web3.account || step === 'connect'">Connect wallet</h3>
       <div v-else>
         <h3>Account</h3>
-        <p>{{ web3.account }}</p>
         <a
           :href="`https://testnet.iotexscan.io/address/${web3.account}`"
           target="_blank"
@@ -86,7 +85,6 @@ export default {
       if (this.privateKey) {
         await this.loginWithIotex(this.privateKey);
       }
-      console.log(this.web3);
       this.$emit('close');
     }
   }

@@ -5,10 +5,11 @@ import walletconnect from '@snapshot-labs/lock/connectors/walletconnect';
 import walletlink from '@snapshot-labs/lock/connectors/walletlink';
 import torus from '@snapshot-labs/lock/connectors/torus';
 import connectors from '@/helpers/connectors.json';
-import { Account } from 'iotex-antenna/lib/account/account';
+import { Account, IAccount } from 'iotex-antenna/lib/account/account';
 import sleepPromise from 'sleep-promise';
 import Antenna from 'iotex-antenna';
 import { WsSignerPlugin } from 'iotex-antenna/lib/plugin/ws';
+import { IRpcMethod } from 'iotex-antenna/lib/rpc-method/types';
 
 const IOTEX_NET = process.env.NETWORK_URL || '';
 
@@ -30,6 +31,9 @@ Object.entries(connectors).forEach((connector: any) => {
   });
 });
 
+let account: IAccount;
+let antenna: Antenna;
+
 export async function createIotexAccount(): Promise<Account> {
   const antenna = new Antenna(IOTEX_NET);
   const account = antenna.iotx.accounts.create();
@@ -38,25 +42,36 @@ export async function createIotexAccount(): Promise<Account> {
 
 export async function importIotexAccount(address: string): Promise<Account> {
   const anntenna = new Antenna(IOTEX_NET);
-  const account = anntenna.iotx.accounts.addressToAccount(address);
+  account = anntenna.iotx.accounts.addressToAccount(address);
   return account;
 }
 
 export async function authWithIopay(): Promise<Account> {
-  const antenna = new Antenna(IOTEX_NET, {
+  antenna = new Antenna(IOTEX_NET, {
     signer: new WsSignerPlugin()
   });
   await sleepPromise(3000);
-
-  return antenna.iotx.accounts[0];
+  account = antenna.iotx.accounts[0];
+  return account;
 }
 
-export async function signMessage(
-  account: Account,
-  message: string
-): Promise<string> {
-  // @ts-ignore
-  return account.sign(message).toString('hex');
+export function getBlockNumber(): number {
+  // return antenna;
+  return 10;
+}
+
+export function getProvider(): IRpcMethod {
+  return antenna.currentProvider();
+}
+
+export async function signMessage(message: string): Promise<string> {
+  try {
+    // @ts-ignore
+    const signed = await account.sign(message);
+    return signed.toString('hex');
+  } catch (e) {
+    return '';
+  }
 }
 
 export default options;

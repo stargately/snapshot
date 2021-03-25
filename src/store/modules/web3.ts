@@ -96,28 +96,8 @@ const actions = {
     }
   },
 
-  signMessage: async ({ state: _state, commit }, message: string) => {
-    if (auth) {
-      const sign = await auth.account.sign(message);
-      console.log(sign);
-    }
-  },
-
-  loginWithIotex: async ({ commit }, address: string) => {
-    auth = getInstance();
-    commit('SET', { authLoading: true });
-    const account = await importIotexAccount(address);
-    const result = await setAuth(account);
-    notifyAuth(commit, result);
-    if (result) {
-      commit('WEB3_SET', { account: account.address, profile: null });
-      commit('SET', { authLoading: false });
-    }
-  },
-
   loginWithIopay: async ({ commit }) => {
     commit('SET', { authLoading: true });
-
     const account = await authWithIopay();
     const result = await setAuth(account);
     notifyAuth(commit, result);

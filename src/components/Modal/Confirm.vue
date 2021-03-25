@@ -92,6 +92,7 @@ export default {
   methods: {
     ...mapActions(['send']),
     async handleSubmit() {
+      console.log(this.proposal);
       this.loading = true;
       await this.send({
         space: this.space.key,

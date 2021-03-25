@@ -6,9 +6,6 @@ export const getScores = async (
   addresses: any[]
 ) => [{ '1': 1000, '2': 100 }];
 
-export const signMessage = async (message: any, account: string) =>
-  'sign_message_placeholder';
-
 export const getBlockNumber = (provider: string) => {
   return 10;
 };
