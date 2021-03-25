@@ -49,22 +49,26 @@ const setAuth = async (
   if (auth.web3 && auth.web3.isAuthenticated) {
     return true;
   }
-  let isAuthed = true;
-  if (account) {
-    auth.account = account;
-    isAuthed = await authServer(auth.account);
+  try {
+    let isAuthed = true;
+    if (account) {
+      auth.account = account;
+      isAuthed = await authServer(auth.account);
+    }
+    if (address) {
+      auth.account = await importIotexAccount(address);
+    }
+    if (auth) {
+      auth.web3 = {
+        isAuthenticated: {
+          value: true
+        }
+      };
+    }
+    return isAuthed;
+  } catch (e) {
+    return false;
   }
-  if (address) {
-    auth.account = await importIotexAccount(address);
-  }
-  if (auth) {
-    auth.web3 = {
-      isAuthenticated: {
-        value: true
-      }
-    };
-  }
-  return isAuthed;
 };
 
 const mutations = {
@@ -98,14 +102,19 @@ const actions = {
 
   loginWithIopay: async ({ commit }) => {
     commit('SET', { authLoading: true });
-    const account = await authWithIopay();
-    const result = await setAuth(account);
-    notifyAuth(commit, result);
-    if (result) {
-      commit('WEB3_SET', {
-        account: account.address,
-        profile: null
-      });
+    try {
+      const account = await authWithIopay();
+      const result = await setAuth(account);
+      notifyAuth(commit, result);
+      if (result) {
+        commit('WEB3_SET', {
+          account: account.address,
+          profile: null
+        });
+      }
+    } catch (e) {
+      notifyAuth(commit, false);
+    } finally {
       commit('SET', { authLoading: false });
     }
   },
